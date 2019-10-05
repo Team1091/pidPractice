@@ -1,6 +1,6 @@
 package com.team1091.pid
 
-import com.team1091.pid.controller.HoldPosition
+import com.team1091.pid.controller.HoldPositionController
 import processing.core.PApplet
 import processing.core.PConstants
 import kotlin.math.cos
@@ -19,7 +19,7 @@ class PIDPractice : PApplet() {
     )
     val motor = Motor(wheel)
     val controller =
-        HoldPosition(Math.toRadians(30.0)) //com.team1091.pid.controller.GunItController(10.0)
+        HoldPositionController(Math.toRadians(30.0)) //com.team1091.pid.controller.GunItController(10.0)
 
     override fun settings() {
         size(500, 500)
