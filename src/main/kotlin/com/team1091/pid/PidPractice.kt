@@ -3,9 +3,6 @@ package com.team1091.pid
 import com.team1091.pid.controller.HoldPositionController
 import com.team1091.pid.controller.SpeedController
 import processing.core.PApplet
-import processing.core.PConstants
-import kotlin.math.cos
-import kotlin.math.sin
 
 fun main() {
     PApplet.main(arrayOf("com.team1091.pid.PIDPractice"))
@@ -15,7 +12,7 @@ fun main() {
 class PIDPractice : PApplet() {
 
     val posWheel = Wheel(
-        60f,80f,
+        60f, 80f,
         30.0,
         1.0
     )
@@ -23,7 +20,7 @@ class PIDPractice : PApplet() {
     val posController = HoldPositionController(Math.toRadians(30.0))
 
     val speedWheel = Wheel(
-        300f,80f,
+        300f, 80f,
         30.0,
         1.0
     )
