@@ -1,6 +1,7 @@
 package com.team1091.pid
 
 import com.team1091.pid.controller.HoldPositionController
+import com.team1091.pid.controller.SpeedController
 import processing.core.PApplet
 import processing.core.PConstants
 import kotlin.math.cos
@@ -13,13 +14,21 @@ fun main() {
 
 class PIDPractice : PApplet() {
 
-    val wheel = Wheel(
+    val posWheel = Wheel(
+        60f,80f,
         30.0,
         1.0
     )
-    val motor = Motor(wheel)
-    val controller =
-        HoldPositionController(Math.toRadians(30.0)) //com.team1091.pid.controller.GunItController(10.0)
+    val posMotor = Motor(posWheel)
+    val posController = HoldPositionController(Math.toRadians(30.0))
+
+    val speedWheel = Wheel(
+        300f,80f,
+        30.0,
+        1.0
+    )
+    val speedMotor = Motor(speedWheel)
+    val speedController = SpeedController(10.0)
 
     override fun settings() {
         size(500, 500)
@@ -31,45 +40,32 @@ class PIDPractice : PApplet() {
         val dt = (now - lastTime).toDouble() / 1_000_000_000
         lastTime = now
 
-        // simulation
-        motor.set(controller.calcPower(wheel))
 
-        motor.simulate(dt)
+        posMotor.set(posController.calcPower(posWheel))
+        speedMotor.set(speedController.calcPower(speedWheel))
+
+        // simulation
+        posMotor.simulate(dt)
+        speedMotor.simulate(dt)
 
         // display the wheel
         background(64)
 
-        val centerX = 250f
-        val centerY = 250f
-        val wheelRadius = wheel.diameter.toFloat()
+        posWheel.render(this)
+        speedWheel.render(this)
 
-        ellipseMode(PConstants.RADIUS)
-        ellipse(centerX, centerY, wheelRadius, wheelRadius)
-        line(
-            centerX,
-            centerY,
-            centerX + cos(wheel.rotation).toFloat() * wheelRadius,
-            centerY + sin(wheel.rotation).toFloat() * wheelRadius
-        )
-
-        // Target line
-        stroke(255f, 0f, 0f, 255f)
-        line(
-            centerX,
-            centerY,
-            centerX + cos(controller.target).toFloat() * wheelRadius * 1.2f,
-            centerY + sin(controller.target).toFloat() * wheelRadius * 1.2f
-        )
+        posMotor.render(this)
+//        speedMotor.render(this)
 
         stroke(0)
-        text("Attempting to hold at ${controller.target}", 20f, 20f)
-        text("Pos: ${wheel.rotation}", 20f, 40f)
+        text("Attempting to hold at ${posController.target}", 20f, 20f)
+        text("Pos: ${posWheel.rotation}", 20f, 40f)
     }
 
     override fun mouseClicked() {
         val x = mouseX - 250
         val y = mouseY - 250
-        controller.target = Math.atan2(y.toDouble(), x.toDouble())
+        posController.target = Math.atan2(y.toDouble(), x.toDouble())
     }
 }
 
